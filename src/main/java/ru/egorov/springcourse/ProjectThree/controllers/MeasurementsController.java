@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.egorov.springcourse.ProjectThree.dto.MeasurementDTO;
+import ru.egorov.springcourse.ProjectThree.dto.MeasurementsResponse;
 import ru.egorov.springcourse.ProjectThree.models.Measurement;
 import ru.egorov.springcourse.ProjectThree.services.MeasurementsService;
 import ru.egorov.springcourse.ProjectThree.util.*;
 
 import javax.validation.Valid;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.egorov.springcourse.ProjectThree.util.ErrorMessageBuilder.getMessage;
@@ -48,8 +48,9 @@ public class MeasurementsController {
     }
 
     @GetMapping()
-    public List<MeasurementDTO> getMeasurements() {
-        return measurementsService.findAll().stream().map(this::convertToMeasurementDTO).collect(Collectors.toList());
+    public MeasurementsResponse getMeasurements() {
+        return new MeasurementsResponse(measurementsService.findAll().stream().map(this::convertToMeasurementDTO)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/rainyDaysCount")
