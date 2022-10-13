@@ -1,31 +1,29 @@
 package ru.egorov.springcourse.ProjectThree.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.egorov.springcourse.ProjectThree.models.Sensor;
+import ru.egorov.springcourse.ProjectThree.models.Measurement;
 import ru.egorov.springcourse.ProjectThree.services.SensorsService;
 
 @Component
-public class SensorValidator implements Validator {
+public class MeasurementValidator implements Validator {
     private final SensorsService sensorsService;
 
-    @Autowired
-    public SensorValidator(SensorsService sensorsService) {
+    public MeasurementValidator(SensorsService sensorsService) {
         this.sensorsService = sensorsService;
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Sensor.class.equals(clazz);
+        return Measurement.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        Sensor sensor = (Sensor) target;
+        Measurement measurement = (Measurement) target;
 
-        if (sensorsService.getSensorByName((sensor.getName())).isPresent())
-            errors.rejectValue("name", "", "A sensor with this name already exists");
+        if (sensorsService.getSensorByName(measurement.getSensor().getName()).isEmpty())
+            errors.rejectValue("sensor", "", "A sensor with this name is not registered!");
     }
 }

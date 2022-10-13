@@ -9,8 +9,8 @@ import ru.egorov.springcourse.ProjectThree.repositories.SensorsRepository;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class SensorsService {
-
     private final SensorsRepository sensorsRepository;
 
     @Autowired
@@ -19,8 +19,8 @@ public class SensorsService {
     }
 
     @Transactional
-    public void save(Sensor sensor) {
-        sensorsRepository.save(sensor);
+    public Sensor register(Sensor sensor) {
+        return sensorsRepository.save(sensor);
     }
 
     public Optional<Sensor> getSensorByName(String name) {
