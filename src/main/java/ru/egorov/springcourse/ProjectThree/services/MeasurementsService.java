@@ -8,6 +8,7 @@ import ru.egorov.springcourse.ProjectThree.models.Measurement;
 import ru.egorov.springcourse.ProjectThree.repositories.MeasurementsRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MeasurementsService {
@@ -24,6 +25,14 @@ public class MeasurementsService {
     public void add(Measurement measurement) {
         enrichMeasurement(measurement);
         measurementsRepository.save(measurement);
+    }
+
+    public List<Measurement> findAll() {
+        return measurementsRepository.findAll();
+    }
+
+    public Integer countRainyDays() {
+        return measurementsRepository.findAllByRainingTrue().size();
     }
 
     private void enrichMeasurement(Measurement measurement) {

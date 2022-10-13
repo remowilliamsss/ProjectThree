@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.egorov.springcourse.ProjectThree.dto.MeasurementDTO;
 import ru.egorov.springcourse.ProjectThree.models.Measurement;
 import ru.egorov.springcourse.ProjectThree.services.MeasurementsService;
-import ru.egorov.springcourse.ProjectThree.services.SensorsService;
 import ru.egorov.springcourse.ProjectThree.util.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.egorov.springcourse.ProjectThree.util.ErrorMessageBuilder.getMessage;
 
@@ -45,6 +47,16 @@ public class MeasurementsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @GetMapping()
+    public List<MeasurementDTO> getMeasurements() {
+        return measurementsService.findAll().stream().map(this::convertToMeasurementDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/rainyDaysCount")
+    public Integer countRainyDays () {
+        return measurementsService.countRainyDays();
+    }
+
     @ExceptionHandler
     private ResponseEntity<MeasurementErrorResponse> handleException(MeasurementNotAddedException e) {
         MeasurementErrorResponse response = new MeasurementErrorResponse(
@@ -57,5 +69,9 @@ public class MeasurementsController {
 
     private Measurement convertToMeasurement(MeasurementDTO measurementDTO) {
         return modelMapper.map(measurementDTO, Measurement.class);
+    }
+
+    private MeasurementDTO convertToMeasurementDTO(Measurement measurement) {
+        return modelMapper.map(measurement, MeasurementDTO.class);
     }
 }
